@@ -1,30 +1,22 @@
 package net.pushl.number {
-  import scala.math.BigInt
-  class Fraction(n: BigInt, d: BigInt){
+  case class Fraction(n: BigInt, d: BigInt){
     assert(d != 0)
     private val g = n gcd d
     val numerator   = n * d.signum / g
     val denominator = d * d.signum / g
+
     override def toString(): String = s"Fraction(${numerator},${denominator})"
 
-
-    // for inheritance.
-    def canEqual(other: Any) = other.isInstanceOf[Fraction]
     override def equals(other: Any) = {
       other match {
-        // TODO: Refactoring.
         case that: Fraction =>
           that.canEqual(Fraction.this) &&
-            ((numerator * that.denominator).compare(denominator * that.numerator) == 0)
+            (numerator * that.denominator == denominator * that.numerator)
         case _              => false
       }
     }
-    override def hashCode() : Int = (31 * numerator + denominator).toInt
   }
-  object Fraction {
-    def apply(n: BigInt) = new Fraction(n,1)
-    def apply(n: BigInt, d: BigInt) = new Fraction(n,d)
-  }
+
   object FractionImplicits {
     implicit object FractionIsFractional extends Fractional[Fraction] {
       def compare(x: Fraction, y: Fraction) : Int = (x.numerator * y.denominator) compare (x.denominator * y.numerator)
