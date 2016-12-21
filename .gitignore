@@ -1,4 +1,5 @@
-project
-target
-.ensime
-.ensime_cache
+.classpath
+.project
+/.settings
+/project
+/target
